@@ -1,0 +1,22 @@
+{
+	"name": "Hello World",
+	"author": "Benedek Toth <ben@withalleo.com>",
+	"authorUrl": "https://www.withalleo.com",
+	"description": "A simple Hello World sample widget",
+	"iconUrl": "./assets/icon.png",
+	"version": "1.0.1",
+	"width": 150,
+	"height": 40,
+	"thumbnails": ["./assets/preview.mp4"],
+	"entrypoints": [
+		{
+			"range": "^1.0.0",
+			"apiVersion": 1,
+			"entrypoint": "./index.html"
+		}
+	],
+	"config": {
+		"DefaultHelloWorldText": "Hello World!"
+	}
+
+}

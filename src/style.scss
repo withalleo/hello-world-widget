@@ -1,0 +1,9 @@
+.widget-container.hello-world {
+    --widget-color: white;
+
+    background: transparent;
+    color: var(--widget-color);
+    font-size: 32px;
+    line-height: 40px;
+    white-space: nowrap;
+}

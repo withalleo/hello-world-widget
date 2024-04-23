@@ -1,0 +1,30 @@
+{
+	"compilerOptions": {
+		"target": "esnext",
+		"useDefineForClassFields": true,
+		"module": "esnext",
+		"moduleResolution": "node",
+		"strict": false,
+		"jsx": "preserve",
+		"sourceMap": true,
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"lib": ["esnext", "dom"],
+		"skipLibCheck": true,
+		"noEmit": true
+	},
+	"include": [
+		"./node_modules/@withalleo/alleo-widget/dist/alleo.d.ts",
+		"./node_modules/@withalleo/alleo-widget/dist/widget.d.ts",
+		"./node_modules/@withalleo/alleo-widget/dist/alleoWidgetUtils.ts",
+		"src/**/*.ts",
+		"src/**/*.d.ts",
+	],
+	"paths": {
+		"alleo/service": [
+			"./node_modules/@withalleo/alleo-widget/dist/service.d.ts"
+		],
+		"alleo": ["./node_modules/@withalleo/alleo-widget/dist/widget.d.ts"],
+		"alleoWidgetUtils": ["./node_modules/@withalleo/alleo-widget/dist/alleoWidgetUtils.ts"]
+	}
+}
