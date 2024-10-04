@@ -2,9 +2,9 @@
 	"name": "Hello World",
 	"author": "Benedek Toth <ben@withalleo.com>",
 	"authorUrl": "https://www.withalleo.com",
-	"description": "A simple Hello World sample widget",
+	"description": "A simple Hello World sample widget for the Alleo widget platform",
 	"iconUrl": "./assets/icon.png",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"width": 150,
 	"height": 40,
 	"thumbnails": [

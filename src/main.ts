@@ -31,7 +31,9 @@ class HelloWorldWidget extends AlleoWidget<typeof HelloWorldWidget.defaultShared
     // data between multiple instances of the same widget
     // * Note: The structure of this also provides type safety for this.shared
     private static readonly defaultSharedVariables = {
-        text: <string>HelloWorldWidget.defaultText, color: <string>DefaultColors.text, minWidth: <number>HelloWorldWidget.minSize.width,
+        text: <string>HelloWorldWidget.defaultText,
+        color: <string>DefaultColors.text,
+        minWidth: <number>HelloWorldWidget.minSize.width,
     }
 
     constructor() {
