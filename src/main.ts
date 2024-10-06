@@ -1,5 +1,6 @@
 import {
     AlleoWidget,
+    AnalyticsHelper,
     BoardFabricObjectType,
     ColorPalette,
     ColorPickerHelper,
@@ -12,7 +13,6 @@ import {
     ResizeHelper,
     SettingsDialogHelper,
     Size,
-    waitUntilDomUpdates,
 } from '@withalleo/alleo-widget'
 
 /**
@@ -31,9 +31,7 @@ class HelloWorldWidget extends AlleoWidget<typeof HelloWorldWidget.defaultShared
     // data between multiple instances of the same widget
     // * Note: The structure of this also provides type safety for this.shared
     private static readonly defaultSharedVariables = {
-        text: <string>HelloWorldWidget.defaultText,
-        color: <string>DefaultColors.text,
-        minWidth: <number>HelloWorldWidget.minSize.width,
+        text: <string>HelloWorldWidget.defaultText, color: <string>DefaultColors.text,
     }
 
     constructor() {
@@ -41,10 +39,47 @@ class HelloWorldWidget extends AlleoWidget<typeof HelloWorldWidget.defaultShared
 
         // Initialize the widget with the default text.
         this.updateText(this.shared.text)
+        this.initializeSettingsDialog()
 
         // Subscribe to text field changes and update the widget text accordingly.
         haptic.getFieldChanged$('text').subscribe((text: string) => this.updateText(text))
-        haptic.getFieldChanged$('minWidth').subscribe(() => this.updateMinSize())
+
+        // Initialize font picker helper without specific configurations.
+        // * Note: Settings like these will be automatically synchronized between instances of the widget.
+        // ie. if you change the font, it will instantly change for everyone else.
+        new FontPickerHelper()
+
+        // Initialize color picker helper for text color customization.
+        new ColorPickerHelper(// the handle is a shared variable, where the color will be stored.
+            'color', // the CSS variable that will be updated with the selected color.
+            '--widget-color', // the default color
+            this.shared.color, {
+                label: 'Text color', // Add a custom icon to the color picker. Usually this is a font-awesome 5 solid icon.
+                icon: { icon: 'text', set: 'fas' }, // The color palette to use for the color picker, these are customized by the user
+                palette: ColorPalette.Text, // Whether to include the transparent color in the color picker.
+                includeTransparent: false,
+            })
+
+        // Initialize resize helper which allows the user the resize the widget.
+        new ResizeHelper(HelloWorldWidget.minSize)
+    }
+
+    /**
+     * Updates the widget's text content and adjusts its size if necessary.
+     * @param text The new text to display in the widget.
+     */
+    public updateText(text: string): void {
+        AnalyticsHelper.debug('Text updated to:', text)
+        this.dom.textContent = text
+    }
+
+    /**
+     * Initializes the settings dialog with a text input field.
+     *
+     * This also contains a large number of examples for form fields.
+     */
+    private initializeSettingsDialog(): void {
+
 
         const getExpression = (valueSet: boolean): FormlySelectOption[] => {
             return valueSet ? [{ label: 'Option 1', value: '1' }, { label: 'Option 2', value: '2' }] : []
@@ -206,68 +241,11 @@ class HelloWorldWidget extends AlleoWidget<typeof HelloWorldWidget.defaultShared
                 }],
             }],
         })
-
-        // Initialize font picker helper without specific configurations.
-        // * Note: Settings like these will be automatically synchronized between instances of the widget.
-        // ie. if you change the font, it will instantly change for everyone else.
-        new FontPickerHelper()
-
-        // Initialize color picker helper for text color customization.
-        new ColorPickerHelper(// the handle is a shared variable, where the color will be stored.
-            'color', // the CSS variable that will be updated with the selected color.
-            '--widget-color', // the default color
-            this.shared.color, {
-                label: 'Text color', // Add a custom icon to the color picker. Usually this is a font-awesome 5 solid icon.
-                icon: { icon: 'text', set: 'fas' }, // The color palette to use for the color picker, these are customized by the user
-                palette: ColorPalette.Text, // Whether to include the transparent color in the color picker.
-                includeTransparent: false,
-            })
-
-        // Initialize resize helper which allows the user the resize the widget.
-        new ResizeHelper({ height: HelloWorldWidget.minSize.height, width: this.shared.minWidth })
         // If we just created the widget, let's open the settings dialog.
         if (haptic.creation) settingsDialogHelper.openSettingsDialog()
+
     }
 
-    /**
-     * Updates the widget's text content and adjusts its size if necessary.
-     * @param text The new text to display in the widget.
-     */
-    public updateText(text: string): void {
-        this.debug('Text updated to:', text)
-        this.dom.textContent = text
-        // TODO: this might not be a good practice, since this is called at every initialization as well
-        this.changeMinSize()
-    }
-
-    /**
-     * This function is used to update the size of the widget based on the content size.
-     */
-    private async changeMinSize(): Promise<void> {
-        // Check if the user has edit permissions before resizing the widget.
-        if (!haptic.currentUser.canEdit) return
-
-        // Wait for the DOM rendering to finish before checking the content size.
-        await waitUntilDomUpdates()
-        if (this.dom.scrollWidth > this.dom.clientWidth) {
-            this.debug('resizing widget, since the content does not fit', this.dom.scrollWidth, this.dom.clientWidth)
-            this.shared.minWidth = this.dom.scrollWidth + 10
-        }
-    }
-
-    private updateMinSize(): void {
-        ResizeHelper.setMinSize({ width: this.shared.minWidth, height: HelloWorldWidget.minSize.height })
-    }
-
-    /*
-     * This function is used to log debug messages to the console. Note that these messages will only be visible in a dev deployment.
-     * .info() is visible on prod as well, and it is also logged on the server.
-     * .warn() and .error() are also available.
-     * @param args The arguments to log to the console.
-     */
-    private debug(...args: any[]): void {
-        haptic.logService.debug('Hello World', ...args)
-    }
 }
 
 // Let's initialize the widget

@@ -30,5 +30,6 @@ Just upload the contents of the `dist` folder to your server, and when adding a 
 
 - To get acquainted with Alleo widgets and capabilities, please see the [widget documentation](https://meet.withalleo.com/widget-docs/) as a reference.
 - Have a look at the [Alleo Widget Utility Library](https://www.npmjs.com/package/@withalleo/alleo-widget)
+  - Documentation on [GitHub](https://github.com/withalleo/alleo-widget-docs/blob/main/globals.md#classes)
 - It is required to bump the version number in the manifest file before publishing a new version of the widget. (Be mindful of caching issues!)
 - When developing/testing in the browser: in the dev panel, go to network and turn off caching. Otherwise the browser will cache your widget, even if you hard-reload.
