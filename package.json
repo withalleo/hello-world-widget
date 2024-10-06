@@ -9,7 +9,7 @@
 		"build-dev": "cross-env MODE=development npm run build"
 	},
 	"dependencies": {
-		"@withalleo/alleo-widget": "^1.0.17"
+		"@withalleo/alleo-widget": "^1.0.20"
 	},
 	"devDependencies": {
 		"@ngx-formly/core": "^6.1.7",
