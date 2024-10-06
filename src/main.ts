@@ -1,15 +1,11 @@
 import {
     AlleoWidget,
     AnalyticsHelper,
-    BoardFabricObjectType,
     ColorPalette,
     ColorPickerHelper,
     DefaultColors,
     DeploymentSettingsHelper,
-    FileSystemNodeClassifier,
     FontPickerHelper,
-    FormlySelectOption,
-    IBoardObject,
     ResizeHelper,
     SettingsDialogHelper,
     Size,
@@ -31,7 +27,9 @@ class HelloWorldWidget extends AlleoWidget<typeof HelloWorldWidget.defaultShared
     // data between multiple instances of the same widget
     // * Note: The structure of this also provides type safety for this.shared
     private static readonly defaultSharedVariables = {
-        text: <string>HelloWorldWidget.defaultText, color: <string>DefaultColors.text,
+        // the text content
+        text: <string>HelloWorldWidget.defaultText, // the color of the text
+        color: <string>DefaultColors.text,
     }
 
     constructor() {
@@ -39,10 +37,27 @@ class HelloWorldWidget extends AlleoWidget<typeof HelloWorldWidget.defaultShared
 
         // Initialize the widget with the default text.
         this.updateText(this.shared.text)
-        this.initializeSettingsDialog()
 
         // Subscribe to text field changes and update the widget text accordingly.
         haptic.getFieldChanged$('text').subscribe((text: string) => this.updateText(text))
+
+        // Initialize settings dialog with a text input field.
+        const settingsDialogHelper = new SettingsDialogHelper({
+            fields: [
+                {
+                    key: 'text',
+                    type: 'input',
+                    defaultValue: this.shared.text,
+                    props: {
+                        label: 'Text to display',
+                        description: 'The text that will be displayed in the widget.',
+                    },
+                },
+            ],
+        })
+
+        // If we just created the widget, let's open the settings dialog.
+        if (haptic.creation) settingsDialogHelper.openSettingsDialog()
 
         // Initialize font picker helper without specific configurations.
         // * Note: Settings like these will be automatically synchronized between instances of the widget.
@@ -50,15 +65,17 @@ class HelloWorldWidget extends AlleoWidget<typeof HelloWorldWidget.defaultShared
         new FontPickerHelper()
 
         // Initialize color picker helper for text color customization.
-        new ColorPickerHelper(// the handle is a shared variable, where the color will be stored.
+        new ColorPickerHelper( // the handle is a shared variable, where the color will be stored.
             'color', // the CSS variable that will be updated with the selected color.
             '--widget-color', // the default color
-            this.shared.color, {
+            this.shared.color,
+            {
                 label: 'Text color', // Add a custom icon to the color picker. Usually this is a font-awesome 5 solid icon.
                 icon: { icon: 'text', set: 'fas' }, // The color palette to use for the color picker, these are customized by the user
                 palette: ColorPalette.Text, // Whether to include the transparent color in the color picker.
                 includeTransparent: false,
-            })
+            },
+        )
 
         // Initialize resize helper which allows the user the resize the widget.
         new ResizeHelper(HelloWorldWidget.minSize)
@@ -72,180 +89,6 @@ class HelloWorldWidget extends AlleoWidget<typeof HelloWorldWidget.defaultShared
         AnalyticsHelper.debug('Text updated to:', text)
         this.dom.textContent = text
     }
-
-    /**
-     * Initializes the settings dialog with a text input field.
-     *
-     * This also contains a large number of examples for form fields.
-     */
-    private initializeSettingsDialog(): void {
-
-
-        const getExpression = (valueSet: boolean): FormlySelectOption[] => {
-            return valueSet ? [{ label: 'Option 1', value: '1' }, { label: 'Option 2', value: '2' }] : []
-        }
-
-        const getExpressionAsync = async (valueSet: boolean): Promise<boolean> => {
-            await haptic.utils.sleep(100)
-            return valueSet
-        }
-
-        // Initialize settings dialog with a text input field.
-        const settingsDialogHelper = new SettingsDialogHelper({
-            fields: [{
-                type: 'tabs', fieldGroup: [{
-                    props: { label: 'Settings' }, fieldGroup: [{
-                        template: '<h3>Content</h3>',
-                    }, {
-                        key: 'text', type: 'input', defaultValue: this.shared.text, props: {
-                            label: 'Text to display', description: 'The text that will be displayed in the widget.',
-                        },
-                    }],
-                }, {
-                    props: { label: 'Form Element Demo' }, fieldGroup: [{
-                        template: '<h3>Form element Demo</h3>' + '<p>These are just random form elements to showcase the different types of form elements available.</p>',
-                    }, {
-                        key: 'whatever', type: 'input', props: {
-                            label: 'the next field will change if this input is empty or not',
-                        }, // Method 2: this is a more advanced way to handle changes in the form field. However this supports async options better.
-                        hooks: {
-                            onChanges: async (field) => {
-                                const form = field.formControl.parent
-                                form.get('whatever').valueChanges.subscribe(async (value) => {
-                                    const options = await getExpressionAsync(value)
-                                    const whatever2Field = form.get('whatever2')
-                                    if (!options) {
-                                        whatever2Field.disable()
-                                    } else {
-                                        whatever2Field.enable()
-                                    }
-                                    whatever2Field.updateValueAndValidity()
-                                })
-                            },
-                        },
-                    }, {
-                        key: 'whatever2', type: 'select', props: {
-                            label: 'See... the content and values of these are changing.', options: [],
-                        }, expressions: {
-                            // Method 1: we can overwrite basically any property of the form field with expressions.
-
-                            // let's change the options in the dropdown based on the value of the 'whatever' field
-                            'props.options': (field) => getExpression(field.model.whatever),
-
-                            // let's change the label of the field based on the value of the 'whatever' field
-                            'props.label': (field) => {
-                                if (!field.model.whatever) {
-                                    return 'Whatever 2 (disabled)'
-                                } else if (field.model.whatever === 'whatever') {
-                                    return 'Whatever 2 (Hello)'
-                                } else {
-                                    return 'Whatever 2'
-                                }
-                            }, // alternatively you can hide the field based on the value of another field
-                            // hide: (field) => !field.model.whatever
-                        }, // this is recommended in combination with hide:
-                        // resetOnHide: false,
-                    }, {
-                        type: 'checkbox', key: 'checkbox', defaultValue: true, props: {
-                            label: 'Checkbox',
-                        },
-                    }, {
-                        type: 'select', key: 'select', defaultValue: '1', props: {
-                            label: 'Select', options: [{ label: 'Option 1', value: '1' }, { label: 'Option 2', value: '2' }],
-                        },
-                    }, {
-                        type: 'input', key: 'input', defaultValue: 'Hello World', props: {
-                            label: 'Input',
-                        },
-                    }, {
-                        type: 'multicheckbox', defaultValue: ['1'], key: 'multiCheckbox', props: {
-                            label: 'Multi Checkbox', options: [{ label: 'Option 1', value: '1' }, { label: 'Option 2', value: '2' }],
-                        },
-                    }, {
-                        type: 'radio', key: 'radio', defaultValue: '1', props: {
-                            label: 'Radio', options: [{ label: 'Option 1', value: '1' }, { label: 'Option 2', value: '2' }],
-                        },
-                    }, {
-                        type: 'toggle', key: 'toggle', defaultValue: true, props: {
-                            label: 'Toggle',
-                        },
-                    }, {
-                        type: 'slider', key: 'slider', defaultValue: 50, props: {
-                            label: 'Slider', min: 0, max: 100, step: 10, showTicks: true, thumbLabel: true,
-                        },
-                    }, {
-                        type: 'chips', key: 'chips', defaultValue: ['Widget Dev'], props: {
-                            label: 'Chips', items: ['Frontend', 'Backend', 'DevOps'],
-                        },
-                    }, {
-                        type: 'input', key: 'color', defaultValue: this.shared.color, props: {
-                            label: 'Color', type: 'color',
-                        },
-                    }, {
-                        type: 'array', key: 'array', defaultValue: [{ name: 'Widget Dev', checkbox: true }], props: {
-                            addText: 'Add', label: 'Array', minItems: 0, maxItems: 25,
-                        }, fieldArray: {
-                            fieldGroup: [{
-                                key: 'name', type: 'input', props: {
-                                    label: 'What?', maxLength: 30, minLength: 1, required: true,
-                                },
-                            }, {
-                                key: 'checkbox', type: 'checkbox', defaultValue: true, props: {
-                                    label: 'Yes?',
-                                },
-                            }],
-                        },
-                    },
-
-                        {
-                            template: '<h3>Advanced form elements</h3>',
-                        } /*
-
-                                    Object props:
-
-                                    interface BoardObjectProps extends FormlyFieldProps {
-                                       filterFn?: (obj: fabric.Object) =&gt; boolean;
-                                       additionalOptions?: { value: any; label: string }[];
-                                    }
-                                 */, {
-                            type: 'boardobject', key: 'obj', props: {
-                                label: 'Board object', placeholder: 'test placeholder', labelFn: (obj: IBoardObject) => {
-                                    return obj.type + ': ' + obj.humanTextId
-                                }, filterFn: (obj: IBoardObject) => {
-                                    return obj.type !== BoardFabricObjectType.Widget
-                                }, additionalOptions: [{ value: '', label: 'No Object' }],
-                            },
-                        }, {
-                            type: 'file', key: 'file', props: {
-                                label: 'Image File', placeholder: 'test placeholder', showThumbnail: true, // Font awesome solid icon name
-                                icon: 'wallpaper', fileTypes: [FileSystemNodeClassifier.Image],
-                            },
-                        }, {
-                            type: 'file', key: 'file2', props: {
-                                label: 'Non-image file', placeholder: 'test non-image placeholder',
-                            },
-                        },
-
-                        {
-                            type: 'array', key: 'array2', defaultValue: [], props: {
-                                addText: 'Add', label: 'A list of slides', minItems: 0, maxItems: 25,
-                            }, fieldArray: {
-                                fieldGroup: [{
-                                    type: 'file', props: {
-                                        label: 'File', showThumbnail: false, // Font awesome solid icon name
-                                        icon: 'image', fileTypes: [FileSystemNodeClassifier.SlideTemplate],
-                                    },
-                                }],
-                            },
-                        }],
-                }],
-            }],
-        })
-        // If we just created the widget, let's open the settings dialog.
-        if (haptic.creation) settingsDialogHelper.openSettingsDialog()
-
-    }
-
 }
 
 // Let's initialize the widget
