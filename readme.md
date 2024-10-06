@@ -6,7 +6,7 @@ It includes a very simple "Hello World" widget, will all the necessary boilerpla
 
 ## Installation
 
-```npm install```
+`npm install`
 
 ## Code
 
@@ -18,7 +18,7 @@ The `public/assets` folder contains the icon, preview video and other library el
 
 ## Build
 
-```npm run build-prod```
+`npm run build-prod`
 
 If the build is successful, the widget will be available in the `dist` folder.
 
@@ -28,8 +28,8 @@ Just upload the contents of the `dist` folder to your server, and when adding a 
 
 ## General Development Advice
 
-- To get acquainted with Alleo widgets and capabilities, please see the [widget documentation](https://meet.withalleo.com/widget-docs/) as a reference.
-- Have a look at the [Alleo Widget Utility Library](https://www.npmjs.com/package/@withalleo/alleo-widget)
-  - Documentation on [GitHub](https://github.com/withalleo/alleo-widget-docs/blob/main/globals.md#classes)
-- It is required to bump the version number in the manifest file before publishing a new version of the widget. (Be mindful of caching issues!)
-- When developing/testing in the browser: in the dev panel, go to network and turn off caching. Otherwise the browser will cache your widget, even if you hard-reload.
+-   To get acquainted with Alleo widgets and capabilities, please see the [widget documentation](https://meet.withalleo.com/widget-docs/) as a reference.
+-   Have a look at the [Alleo Widget Utility Library](https://www.npmjs.com/package/@withalleo/alleo-widget)
+    -   Documentation on [GitHub](https://github.com/withalleo/alleo-widget-docs/blob/main/globals.md#classes)
+-   It is required to bump the version number in the manifest file before publishing a new version of the widget. (Be mindful of caching issues!)
+-   When developing/testing in the browser: in the dev panel, go to network and turn off caching. Otherwise the browser will cache your widget, even if you hard-reload.

@@ -14,7 +14,18 @@
 			"dom"
 		],
 		"skipLibCheck": true,
-		"noEmit": true
+		"noEmit": true,
+		"paths": {
+			"alleo/service": [
+				"./node_modules/@withalleo/alleo-widget/dist/service.d.ts"
+			],
+			"alleo": [
+				"./node_modules/@withalleo/alleo-widget/dist/widget.d.ts"
+			],
+			"alleoWidgetUtils": [
+				"./node_modules/@withalleo/alleo-widget/dist/alleoWidgetUtils.ts"
+			]
+		}
 	},
 	"include": [
 		"./node_modules/@withalleo/alleo-widget/dist/alleo.d.ts",
@@ -23,15 +34,4 @@
 		"src/**/*.ts",
 		"src/**/*.d.ts"
 	],
-	"paths": {
-		"alleo/service": [
-			"./node_modules/@withalleo/alleo-widget/dist/service.d.ts"
-		],
-		"alleo": [
-			"./node_modules/@withalleo/alleo-widget/dist/widget.d.ts"
-		],
-		"alleoWidgetUtils": [
-			"./node_modules/@withalleo/alleo-widget/dist/alleoWidgetUtils.ts"
-		]
-	}
 }
