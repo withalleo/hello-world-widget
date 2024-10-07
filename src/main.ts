@@ -17,11 +17,15 @@ import {
  * It supports changing the font, color, and size, and showcases some features of the SDK.
  */
 class HelloWorldWidget extends AlleoWidget<typeof HelloWorldWidget.defaultSharedVariables> {
+
     // The DeploymentSettingsHelper allows you to access the settings defined in the manifest.json file.
     // This is useful when you want to use settings that are defined after build, but are specific to deployment.
     private static defaultText: string = DeploymentSettingsHelper.settings.DefaultHelloWorldLabel || 'Hello World!'
+
     // The minimum size of the widget
+    // Note: the default size is set in the manifest.json file.
     private static minSize: Size = { width: 150, height: 40 }
+
     // the default shared variables for the widget
     // "shared variable" are a way to synchronize (and save)
     // data between multiple instances of the same widget
@@ -54,6 +58,8 @@ class HelloWorldWidget extends AlleoWidget<typeof HelloWorldWidget.defaultShared
                     },
                 },
             ],
+        },{
+            createSettingsButtonOnInit: true,
         })
 
         // If we just created the widget, let's open the settings dialog.
@@ -77,7 +83,7 @@ class HelloWorldWidget extends AlleoWidget<typeof HelloWorldWidget.defaultShared
             },
         )
 
-        // Initialize resize helper which allows the user the resize the widget.
+        // The ResizeHelper allows the user the resize the widget.
         new ResizeHelper(HelloWorldWidget.minSize)
     }
 
@@ -86,7 +92,7 @@ class HelloWorldWidget extends AlleoWidget<typeof HelloWorldWidget.defaultShared
      * @param text The new text to display in the widget.
      */
     public updateText(text: string): void {
-        AnalyticsHelper.debug('Text updated to:', text)
+        AnalyticsHelper.debug('Text updated', text)
         this.dom.textContent = text
     }
 }
