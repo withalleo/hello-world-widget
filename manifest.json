@@ -4,7 +4,7 @@
 	"authorUrl": "https://www.withalleo.com",
 	"description": "A simple Hello World sample widget for the Alleo widget platform",
 	"iconUrl": "./assets/icon.png",
-	"version": "1.0.2",
+	"version": "1.0.5",
 	"width": 150,
 	"height": 40,
 	"thumbnails": ["./assets/preview.mp4"],

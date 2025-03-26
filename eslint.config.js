@@ -22,7 +22,7 @@ module.exports = [
         },
         rules: {
             'no-var': 'error',
-            'prefer-const': 'error',
+            'prefer-const': 'warn',
             'no-underscore-dangle': 'off',
             'no-fallthrough': 'off',
             '@typescript-eslint/no-misused-new': 'error',

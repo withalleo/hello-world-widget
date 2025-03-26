@@ -21,6 +21,12 @@
             "options": {
                 "parser": "json"
             }
+        },
+        {
+            "files": "*.md",
+            "options": {
+                "endOfLine": "crlf"
+            }
         }
     ]
 }
