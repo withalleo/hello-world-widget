@@ -8,6 +8,7 @@ import {
     FontPickerHelper,
     ResizeHelper,
     SettingsDialogHelper,
+    SharedVariable,
     Size,
 } from '@withalleo/alleo-widget'
 
@@ -17,7 +18,6 @@ import {
  * It supports changing the font, color, and size, and showcases some features of the SDK.
  */
 class HelloWorldWidget extends AlleoWidget<typeof HelloWorldWidget.defaultSharedVariables> {
-
     // The DeploymentSettingsHelper allows you to access the settings defined in the manifest.json file.
     // This is useful when you want to use settings that are defined after build, but are specific to deployment.
     private static defaultText: string = DeploymentSettingsHelper.settings.DefaultHelloWorldLabel || 'Hello World!'
@@ -43,24 +43,27 @@ class HelloWorldWidget extends AlleoWidget<typeof HelloWorldWidget.defaultShared
         this.updateText(this.shared.text)
 
         // Subscribe to text field changes and update the widget text accordingly.
-        haptic.getFieldChanged$('text').subscribe((text: string) => this.updateText(text))
+        new SharedVariable.observer('text', () => this.updateText(this.shared.text))
 
         // Initialize settings dialog with a text input field.
-        const settingsDialogHelper = new SettingsDialogHelper({
-            fields: [
-                {
-                    key: 'text',
-                    type: 'input',
-                    defaultValue: this.shared.text,
-                    props: {
-                        label: 'Text to display',
-                        description: 'The text that will be displayed in the widget.',
+        const settingsDialogHelper = new SettingsDialogHelper(
+            {
+                fields: [
+                    {
+                        key: 'text',
+                        type: 'input',
+                        defaultValue: this.shared.text,
+                        props: {
+                            label: 'Text to display',
+                            description: 'The text that will be displayed in the widget.',
+                        },
                     },
-                },
-            ],
-        },{
-            createSettingsButtonOnInit: true,
-        })
+                ],
+            },
+            {
+                createSettingsButtonOnInit: true,
+            },
+        )
 
         // If we just created the widget, let's open the settings dialog.
         if (haptic.creation) settingsDialogHelper.openSettingsDialog()
