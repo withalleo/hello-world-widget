@@ -4,12 +4,12 @@ import {
     ColorPalette,
     ColorPickerHelper,
     DefaultColors,
-    DeploymentSettingsHelper,
     FontPickerHelper,
     ResizeHelper,
     SettingsDialogHelper,
     SharedVariable,
     Size,
+    WidgetSettings,
 } from '@withalleo/alleo-widget'
 
 /**
@@ -20,7 +20,7 @@ import {
 class HelloWorldWidget extends AlleoWidget<typeof HelloWorldWidget.defaultSharedVariables> {
     // The DeploymentSettingsHelper allows you to access the settings defined in the manifest.json file.
     // This is useful when you want to use settings that are defined after build, but are specific to deployment.
-    private static defaultText: string = DeploymentSettingsHelper.settings.DefaultHelloWorldLabel || 'Hello World!'
+    private static defaultText: string = WidgetSettings.settings.DefaultHelloWorldLabel || 'Hello World!'
 
     // The minimum size of the widget
     // Note: the default size is set in the manifest.json file.
