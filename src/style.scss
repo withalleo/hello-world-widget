@@ -1,10 +1,21 @@
 .widget-container.hello-world {
-    // The color of the widget. This variable is used in the widget's color picker
+    // The color of the widget. This variable is used in the widget's color picker, and is overridden before the widget even loads.
     --widget-color: white;
+    // The font for the widget. This is set by the font picker.
+    --widget-font: inherit;
+    // These are defined by the Resize helper, and updated automatically.
+    --widget-width: 150px;
+    --widget-height: 40px;
 
     background: transparent;
     color: var(--widget-color);
+    font-family: var(--widget-font);
     font-size: 32px;
     line-height: 40px;
     white-space: nowrap;
+
+    // let's not allow the widget content to overflow from the widget container
+    max-width: var(--widget-width);
+    max-height: var(--widget-height);
+    overflow: clip;
 }
