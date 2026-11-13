@@ -4,14 +4,15 @@ import {
     ColorPalette,
     ColorPickerHelper,
     DefaultColors,
-    FontPickerHelper, HelpButtonHelper,
+    FontPickerHelper,
+    HelpButtonHelper,
     ResizeHelper,
     SettingsDialogHelper,
     SharedVariable,
     TextAlignHelper,
     TextAlignment,
     WidgetSettings,
-} from 'alleoWidgetUtils' // OR you can use '@withalleo/alleo-widget'
+} from '@withalleo/alleo-widget'
 
 /**
  * This is a simple Hello World widget that demonstrates the basic functionality of the Alleo Widget SDK.
