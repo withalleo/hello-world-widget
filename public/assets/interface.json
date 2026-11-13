@@ -1,0 +1,32 @@
+{
+	"id": "hello-world",
+	"name": "Hello World",
+	"description": "The widget shows one line of text on the board, with a transparent background and a fixed font size. Text that is longer than the widget is cut off at the right or bottom edge; it never wraps or shrinks.\n\nThe text, its color, its font, and its alignment are stored in shared variables and are the same for everyone on the board.",
+	"hasBoardObject": true,
+	"service": false,
+	"onePerBoard": false,
+	"resizeable": true,
+	"agentNotes": ["Keep `text` short; the widget does not wrap or shrink long text, so make the widget wider instead."],
+	"settings": {
+		"text": {
+			"type": "string",
+			"description": "Any text. The text shown in the widget, on a single line. The characters `<` and `>` may be stored HTML-escaped (as `&lt;` and `&gt;`) and are then shown as written, not as the original characters. Keep it short; the widget does not wrap or shrink long text, so make the widget wider instead."
+		},
+		"color": {
+			"type": "color",
+			"transparentAllowed": false,
+			"description": "A CSS color, for example a hex color such as `#ffffff`. Color of the text.",
+			"examples": ["#ffffff"]
+		},
+		"font-selector-font": {
+			"type": "string",
+			"description": "A font family name, or empty. Font of the text. Empty uses the widget's default font.",
+			"enum": ["x-alleo-font-sans", "x-alleo-font-serif", "x-alleo-font-script", "x-alleo-font-display", "x-alleo-font-handwriting", "x-alleo-font-monospace"]
+		},
+		"_textAlign": {
+			"type": "string",
+			"description": "`left`, `center`, or `right`. Horizontal alignment of the text inside the widget. It is only visible when the widget is wider than the text.",
+			"enum": ["left", "center", "right"]
+		}
+	}
+}

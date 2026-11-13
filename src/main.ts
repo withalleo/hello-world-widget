@@ -4,7 +4,7 @@ import {
     ColorPalette,
     ColorPickerHelper,
     DefaultColors,
-    FontPickerHelper,
+    FontPickerHelper, HelpButtonHelper,
     ResizeHelper,
     SettingsDialogHelper,
     SharedVariable,
@@ -124,6 +124,9 @@ class HelloWorldWidget extends AlleoWidget<typeof HelloWorldWidget.defaultShared
 
         // Allow users to resize the widget while enforcing minimum dimensions.
         new ResizeHelper({ width: 150, height: 40 })
+
+        // Add a help button (this will show the content of public/documentation/help.md)
+        new HelpButtonHelper()
     }
 
     public override justCreated() {
