@@ -1,11 +1,13 @@
 {
+	"widgetId": "hello-world",
+	"publisherId": "com.withalleo",
 	"name": "Hello World",
 	"author": "Benedek Toth <ben@withalleo.com>",
 	"authorUrl": "https://www.withalleo.com",
 	"description": "A simple Hello World sample widget for the Alleo widget platform",
 	"iconUrl": "./assets/icon.png",
-	"version": "1.0.5",
-	"width": 150,
+	"version": "1.1.31",
+	"width": 180,
 	"height": 40,
 	"thumbnails": ["./assets/preview.mp4"],
 	"entrypoints": [
@@ -16,6 +18,8 @@
 		}
 	],
 	"config": {
-		"DefaultHelloWorldText": "Hello World!"
-	}
+		"DefaultTextAlign": "left",
+		"DefaultHelloWorldLabel": "Hello Alleo!"
+	},
+	"settingsScopes": ["default-colors", "settings-dialog", "color-picker"]
 }
